@@ -6,7 +6,7 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Events from "../pages/Events";
 import AddEvent from "../pages/AddEvent";
-// import MyEvents from "../pages/MyEvents";
+import MyEvents from "../pages/MyEvents";
 import PrivateRoute from "./PrivateRoute";
 
 
@@ -37,14 +37,14 @@ export default function AppRoutes() {
             </PrivateRoute>
           }
         />
-        {/* <Route
+        <Route
           path="/my-events"
           element={
             <PrivateRoute>
               <MyEvents />
             </PrivateRoute>
           }
-        /> */}
+        />
 
         {/* Optional catch all */}
         <Route path="*" element={<Navigate to="/home" />} />
