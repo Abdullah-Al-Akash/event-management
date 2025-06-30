@@ -8,3 +8,8 @@ export function getEvents(params) {
 export function addEvent(data) {
   return secureClient.post("/events", data);
 }
+
+export const joinEvent = async (eventId) => {
+  const res = await secureClient.post(`/events/${eventId}/join`);
+  return res.data;
+};

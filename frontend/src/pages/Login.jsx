@@ -22,8 +22,8 @@ export default function Login() {
       const response = await loginApi({ email, password });
       const data = response.data;
 
-      localStorage.setItem("token", data.token);
-      login(data.user);
+      // Save user and token via context login function
+      login(data.user, data.token);
 
       Swal.fire({
         icon: "success",
@@ -37,7 +37,10 @@ export default function Login() {
       Swal.fire({
         icon: "error",
         title: "Login Failed",
-        text: error.response?.data?.message || error.message || "Something went wrong",
+        text:
+          error.response?.data?.message ||
+          error.message ||
+          "Something went wrong",
       });
     } finally {
       setLoading(false);
