@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Swal from "sweetalert2";
 
@@ -147,12 +147,12 @@ export default function Login() {
 
         <p className="mt-6 text-center text-gray-600">
           Don't have an account?{" "}
-          <a
-            href="/register"
+          <Link
+            to="/register"
             className="text-brandGreen font-semibold hover:underline"
           >
             Register here
-          </a>
+          </Link>
         </p>
       </motion.div>
     </div>
