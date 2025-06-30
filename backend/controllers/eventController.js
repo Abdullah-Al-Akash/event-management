@@ -127,15 +127,22 @@ export const deleteEvent = async (req, res) => {
     const event = await Event.findById(eventId);
 
     if (!event) return res.status(404).json({ message: 'Event not found' });
-    if (event.user.toString() !== req.user._id.toString())
-      return res.status(403).json({ message: 'Not authorized' });
 
-    await event.remove();
+    // Check ownership
+    if (event.user.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Not authorized' });
+    }
+
+    // Use findByIdAndDelete instead of remove
+    await Event.findByIdAndDelete(eventId);
+
     res.json({ message: 'Event deleted' });
   } catch (error) {
+    console.error("Delete Error:", error);
     res.status(500).json({ message: 'Server error' });
   }
 };
+
 
 // Join event (increment attendeeCount once per user)
 export const joinEvent = async (req, res) => {
@@ -146,12 +153,9 @@ export const joinEvent = async (req, res) => {
     const event = await Event.findById(eventId);
     if (!event) return res.status(404).json({ message: 'Event not found' });
 
-    // We need a way to track who joined events, so add an array of userIds who joined.
-    // Let's add that field now.
-
     // If user already joined, return error
     if (event.attendees && event.attendees.includes(userId.toString())) {
-      return res.status(400).json({ message: 'User already joined this event' });
+      return res.status(400).json({ message: 'You already joined this event' });
     }
 
     // Otherwise add userId to attendees array and increment count
