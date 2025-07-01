@@ -3,13 +3,31 @@ import secureClient from "../api/secureClient";
 import { useAuth } from "../context/AuthContext";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
+import {
+  CalendarDays,
+  MapPin,
+  UserRound,
+  Users,
+  Pencil,
+  Trash2,
+} from "lucide-react";
+import SectionTitle from "../components/SectionTitle";
+
+// ✅ Helper to format datetime-local string in local time
+function formatLocalDateTimeInput(dateString) {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = `${date.getMonth() + 1}`.padStart(2, "0");
+  const day = `${date.getDate()}`.padStart(2, "0");
+  const hours = `${date.getHours()}`.padStart(2, "0");
+  const minutes = `${date.getMinutes()}`.padStart(2, "0");
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
 
 export default function MyEvents() {
   const { user } = useAuth();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // For update modal
   const [showModal, setShowModal] = useState(false);
   const [currentEvent, setCurrentEvent] = useState(null);
   const [updateLoading, setUpdateLoading] = useState(false);
@@ -44,7 +62,6 @@ export default function MyEvents() {
       try {
         await secureClient.delete(`/events/${id}`);
         Swal.fire("Deleted!", "Your event has been deleted.", "success");
-        // Refresh events list
         fetchMyEvents();
       } catch (error) {
         Swal.fire("Error", "Failed to delete event.", "error");
@@ -92,7 +109,9 @@ export default function MyEvents() {
 
   if (loading) {
     return (
-      <p className="text-center mt-12 text-brandGreen font-semibold">Loading your events...</p>
+      <p className="text-center mt-12 text-brandGreen font-semibold">
+        Loading your events...
+      </p>
     );
   }
 
@@ -105,7 +124,8 @@ export default function MyEvents() {
   }
 
   return (
-    <>
+    <div className="min-h-screen">
+      <SectionTitle title={"🌿My Exciting Events"}></SectionTitle>
       <motion.div
         className="max-w-6xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         initial={{ opacity: 0 }}
@@ -115,36 +135,55 @@ export default function MyEvents() {
         {events.map((event) => (
           <motion.div
             key={event._id}
-            className="bg-white shadow-md border border-gray-100 rounded-xl p-6 hover:shadow-lg transition-all"
+            className="bg-white shadow-md border border-gray-100 rounded-xl p-6 hover:shadow-lg transition-all flex flex-col justify-between h-full"
             whileHover={{ scale: 1.03 }}
           >
-            <h3 className="text-xl font-bold text-brandGreen">{event.title}</h3>
-            <p className="text-sm text-gray-600 mb-1">By: {event.name}</p>
-            <p className="text-sm text-gray-500">📍 {event.location}</p>
-            <p className="text-sm text-gray-500">🗓️ {new Date(event.dateTime).toLocaleString()}</p>
-            <p className="text-sm text-gray-700 mt-2">{event.description}</p>
-            <p className="text-sm font-semibold text-gray-600 mt-2">
-              Attendees: {event.attendeeCount}
-            </p>
-            <div className="flex justify-between mt-4">
+            <div className="flex flex-col flex-grow">
+              <h3 className="text-xl font-bold text-brandGreen">
+                {event.title}
+              </h3>
+
+              <div className="flex items-center text-sm text-gray-600 gap-2 mt-1">
+                <UserRound size={16} /> <span>By: {event.name}</span>
+              </div>
+
+              <div className="flex items-center text-sm text-gray-500 gap-2 mt-1">
+                <MapPin size={16} /> <span>{event.location}</span>
+              </div>
+
+              <div className="flex items-center text-sm text-gray-500 gap-2 mt-1">
+                <CalendarDays size={16} />{" "}
+                <span>{new Date(event.dateTime).toLocaleString()}</span>
+              </div>
+
+              <p className="text-sm text-gray-700 mt-2 line-clamp-4">
+                {event.description}
+              </p>
+
+              <div className="flex items-center text-sm font-semibold text-gray-600 gap-2 mt-2">
+                <Users size={16} />{" "}
+                <span>Attendees: {event.attendeeCount}</span>
+              </div>
+            </div>
+
+            <div className="flex justify-between mt-4 gap-2">
               <button
                 onClick={() => openUpdateModal(event)}
-                className="px-4 py-2 bg-brandGreen text-white rounded-md hover:bg-emerald-700 transition"
+                className="flex items-center gap-2 px-4 py-2 bg-brandGreen text-white rounded-md hover:bg-emerald-700 transition"
               >
-                Update
+                <Pencil size={16} /> Update
               </button>
               <button
                 onClick={() => handleDelete(event._id)}
-                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
+                className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
               >
-                Delete
+                <Trash2 size={16} /> Delete
               </button>
             </div>
           </motion.div>
         ))}
       </motion.div>
 
-      {/* Update Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <motion.div
@@ -153,10 +192,14 @@ export default function MyEvents() {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.3 }}
           >
-            <h3 className="text-xl font-bold text-brandGreen mb-4 text-center">Update Event</h3>
+            <h3 className="text-xl font-bold text-brandGreen mb-4 text-center">
+              Update Event
+            </h3>
             <form onSubmit={handleUpdateSubmit} className="space-y-4">
               <div>
-                <label className="block font-medium mb-1 text-sm text-gray-600">Event Title</label>
+                <label className="block font-medium mb-1 text-sm text-gray-600">
+                  Event Title
+                </label>
                 <input
                   type="text"
                   name="title"
@@ -167,18 +210,22 @@ export default function MyEvents() {
                 />
               </div>
               <div>
-                <label className="block font-medium mb-1 text-sm text-gray-600">Date & Time</label>
+                <label className="block font-medium mb-1 text-sm text-gray-600">
+                  Date & Time
+                </label>
                 <input
                   type="datetime-local"
                   name="dateTime"
-                  value={new Date(currentEvent.dateTime).toISOString().slice(0,16)} // format for datetime-local
+                  value={formatLocalDateTimeInput(currentEvent.dateTime)}
                   onChange={handleUpdateChange}
                   required
                   className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-brandGreen"
                 />
               </div>
               <div>
-                <label className="block font-medium mb-1 text-sm text-gray-600">Location</label>
+                <label className="block font-medium mb-1 text-sm text-gray-600">
+                  Location
+                </label>
                 <input
                   type="text"
                   name="location"
@@ -189,7 +236,9 @@ export default function MyEvents() {
                 />
               </div>
               <div>
-                <label className="block font-medium mb-1 text-sm text-gray-600">Description</label>
+                <label className="block font-medium mb-1 text-sm text-gray-600">
+                  Description
+                </label>
                 <textarea
                   name="description"
                   value={currentEvent.description}
@@ -203,7 +252,9 @@ export default function MyEvents() {
                 type="submit"
                 disabled={updateLoading}
                 className={`w-full py-2 font-medium rounded-md text-white transition ${
-                  updateLoading ? "bg-gray-400 cursor-not-allowed" : "bg-brandGreen hover:bg-emerald-700"
+                  updateLoading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-brandGreen hover:bg-emerald-700"
                 }`}
               >
                 {updateLoading ? "Updating..." : "Update Event"}
@@ -219,6 +270,6 @@ export default function MyEvents() {
           </motion.div>
         </div>
       )}
-    </>
+    </div>
   );
 }

@@ -8,7 +8,8 @@ import {
   MessageSquareIcon,
   StarIcon,
 } from "lucide-react";
-import Footer from "../components/Footer";
+import SectionTitle from "../components/SectionTitle";
+import { Link } from "react-router-dom";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
@@ -58,7 +59,8 @@ export default function Home() {
               Discover & Join Natural Events Around You
             </h1>
             <p className="text-base md:text-lg mb-8 max-w-3xl mx-auto">
-              Simplify your event management. Organize, share, and grow your community — all in one place.
+              Simplify your event management. Organize, share, and grow your
+              community — all in one place.
             </p>
             <a
               href="/events"
@@ -76,22 +78,30 @@ export default function Home() {
           <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {[
               {
-                icon: <RocketIcon className="h-10 w-10 text-brandGreen mx-auto mb-4" />,
+                icon: (
+                  <RocketIcon className="h-10 w-10 text-brandGreen mx-auto mb-4" />
+                ),
                 title: "Fast Setup",
                 desc: "Create and publish events in just a few clicks.",
               },
               {
-                icon: <CalendarIcon className="h-10 w-10 text-brandGreen mx-auto mb-4" />,
+                icon: (
+                  <CalendarIcon className="h-10 w-10 text-brandGreen mx-auto mb-4" />
+                ),
                 title: "Smart Calendar",
                 desc: "Filter events by day, week, or month effortlessly.",
               },
               {
-                icon: <UsersIcon className="h-10 w-10 text-brandGreen mx-auto mb-4" />,
+                icon: (
+                  <UsersIcon className="h-10 w-10 text-brandGreen mx-auto mb-4" />
+                ),
                 title: "Join & Manage",
                 desc: "One-click join and track your participation.",
               },
               {
-                icon: <ShieldCheckIcon className="h-10 w-10 text-brandGreen mx-auto mb-4" />,
+                icon: (
+                  <ShieldCheckIcon className="h-10 w-10 text-brandGreen mx-auto mb-4" />
+                ),
                 title: "Secure Access",
                 desc: "Custom authentication with full control of your data.",
               },
@@ -109,11 +119,80 @@ export default function Home() {
           </div>
         </div>
       </Section>
+      {/* Event Section */}
+      {/* See Our Events Section */}
+      <Section>
+        <div className="bg-white py-8 px-6 md:px-12">
+          <div className="max-w-7xl mx-auto text-center">
+            <SectionTitle title={"🌿Our Natural Events"}></SectionTitle>
+            <p className="text-gray-600 text-md md:text-lg max-w-2xl mx-auto mb-10">
+              Explore a variety of upcoming events designed to connect, inspire,
+              and engage communities like yours.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+              {[
+                {
+                  title: "Banff National Park, Canada",
+                  date: "May 15, 2025",
+                  location: "Canada",
+                  image:
+                    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Altja_j%C3%B5gi_Lahemaal.jpg/1200px-Altja_j%C3%B5gi_Lahemaal.jpg",
+                },
+                {
+                  title: "Bora Bora",
+                  date: "April 1, 2025",
+                  location: "French Polynesia",
+                  image:
+                    "https://visitreykjavik.is/sites/default/files/styles/original_medium/public/header-image-block/GFG-Sumar-69.jpg.webp?itok=PMZLYYKx",
+                },
+                {
+                  title: "Antelope Canyon",
+                  date: "May 12, 2025",
+                  location: "USA (Arizona)",
+                  image:
+                    "https://www.westfjords.is/static/sitemap/lg/9396dcbca18f8dcbc0e05940eaac87a0-bjorgvin-hilmarsson-0345.jpg?v=1750639761",
+                },
+              ].map((event, i) => (
+                <motion.div
+                  key={i}
+                  className="bg-gray-50 rounded-xl shadow hover:shadow-xl transition overflow-hidden"
+                  whileHover={{ y: -4 }}
+                >
+                  <img
+                    src={event.image}
+                    alt={event.title}
+                    className="h-48 w-full object-cover"
+                  />
+                  <div className="p-5 text-left">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-1">
+                      {event.title}
+                    </h3>
+                    <p className="text-sm text-gray-500">
+                      📅 {event.date} <br />
+                      📍 {event.location}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            <Link
+              to="/events"
+              className="inline-block mt-10 bg-brandGreen text-white px-6 py-3 rounded-md font-semibold shadow hover:bg-emerald-700 transition"
+            >
+              Join Now 🌿
+            </Link>
+          </div>
+        </div>
+      </Section>
 
       {/* Testimonials Section */}
       <Section>
         <div className="py-16 px-6 md:px-12 max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center text-brandGreen mb-10">What People Say</h2>
+          <h2 className="text-3xl font-bold text-center text-brandGreen mb-10">
+            What People Say
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {[1, 2].map((_, i) => (
               <motion.div
@@ -128,8 +207,8 @@ export default function Home() {
                   </h4>
                 </div>
                 <p className="text-sm text-gray-600">
-                  Highly recommend it to anyone planning community or personal events. Very intuitive
-                  and responsive.
+                  Highly recommend it to anyone planning community or personal
+                  events. Very intuitive and responsive.
                 </p>
               </motion.div>
             ))}
@@ -152,7 +231,9 @@ export default function Home() {
                 whileHover={{ scale: 1.05 }}
               >
                 <StarIcon className="w-8 h-8 mx-auto text-brandGreen mb-3" />
-                <h3 className="text-3xl font-bold text-brandGreen">{stat.value}</h3>
+                <h3 className="text-3xl font-bold text-brandGreen">
+                  {stat.value}
+                </h3>
                 <p className="text-gray-600 text-sm mt-1">{stat.label}</p>
               </motion.div>
             ))}
@@ -163,9 +244,12 @@ export default function Home() {
       {/* Call to Action Section */}
       <Section>
         <div className="py-16 px-6 md:px-12 bg-brandGreen text-white text-center rounded-lg max-w-4xl mx-auto my-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Manage Your Event?</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Ready to Manage Your Event?
+          </h2>
           <p className="text-md md:text-lg max-w-xl mx-auto mb-8">
-            Whether you're organizing a meetup, seminar, or celebration — Natural Event has you covered.
+            Whether you're organizing a meetup, seminar, or celebration —
+            Natural Event has you covered.
           </p>
           <a
             href="/add-event"

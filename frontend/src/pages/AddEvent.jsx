@@ -4,10 +4,13 @@ import secureClient from "../api/secureClient";
 import { useAuth } from "../context/AuthContext";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
+import SectionTitle from "../components/SectionTitle";
+import { useNavigate } from "react-router-dom";
 
 export default function AddEvent() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     title: "",
@@ -41,6 +44,7 @@ export default function AddEvent() {
       setLoading(false);
       Swal.fire("Success", "Event added successfully!", "success");
       setFormData({ title: "", dateTime: "", location: "", description: "" });
+      navigate("/my-events")
     } catch (error) {
       setLoading(false);
       Swal.fire("Error", error.response?.data?.message || "Something went wrong.", "error");
@@ -54,7 +58,7 @@ export default function AddEvent() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
     >
-      <h2 className="text-2xl font-bold text-brandGreen mb-6 text-center">Add New Event</h2>
+      <SectionTitle title={"🌿Explore New Events"}></SectionTitle>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block font-medium mb-1 text-sm text-gray-600">Event Title</label>

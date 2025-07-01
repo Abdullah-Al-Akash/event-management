@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const secureClient = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "https://event-management-7dxr.onrender.com/api",
 });
 
 // Add a request interceptor to attach the token automatically
